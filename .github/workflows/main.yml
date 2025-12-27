@@ -2,7 +2,7 @@ name: Deploy Nuxt (Build on Droplet)
 
 on:
   push:
-    branches: [main]
+    branches: [master]
 
 jobs:
   deploy:
