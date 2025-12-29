@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import Task from '../models/Task'
-import TaskEntry from '../models/TaskEntry';
+const currentDate = ref(new Date());
+provide('currentDate', currentDate);
 
-const { data, pending, error } = await useFetch('/api/task/all');
-const tasks = computed(() => (data.value ?? []).map(t => {
-  console.log('task', t);
-  return new Task(t.taskId, t.description, t.taskEntries?.map((entry: any) => {
-    return new TaskEntry(entry.taskEntryId, entry.startedAt, entry.endedAt);
-  }));
-}));
+const { data: tasks, pending, error, refresh } = await useFetch('/api/task/all');
+const activeTask = computed(() => tasks.value?.find((task) => task.endedAt === null) || null);
+const { formatTime } = useDateTime();
+
 </script>
 
 <template>
@@ -16,29 +13,27 @@ const tasks = computed(() => (data.value ?? []).map(t => {
     <app-header />
 
     <main>
-
-      <!-- <task-controls 
-        :currentTaskTime="currentTask?.time" 
-        :currentTaskDateTime="currentTaskDateTime" 
-        @next-task="onNextTask"
-      /> -->
+      <task-controls 
+        :active-task="activeTask"
+        @task-saved="refresh"
+      />
 
       <section class="task-list" aria-label="Task list">
         <template v-if="tasks?.length">
           <ol class="task-list__items">
-            <li class="task-list__item" v-for="task in tasks" :key="task.taskId">
-              <article class="task" :class="{ 'task--active': task.isActive }">
-                <!-- <div class="task__start-and-category">
-                  <time class="task__time" :datetime="task.time">{{ task.time }}</time>
-                  <div class="task__category">{{ task.category }}</div>
-                </div> -->
+            <li class="task-list__item" v-for="task in tasks" :key="task.taskEntryId">
+              <article class="task" :class="{ 'task--active': task.endedAt === null }">
+                <div class="task__start-and-category">
+                  <time class="task__time" :datetime="task.startedAt">{{ formatTime(task.startedAt) }}</time>
+                  <!-- <div class="task__category">{{ task.category }}</div> -->
+                </div>
                 <div class="task__description">{{ task.description }}</div>
               </article>
             </li>
           </ol>
         </template>
-        
       </section>
+
     </main>
   </div>
 </template>

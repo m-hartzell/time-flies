@@ -1,10 +1,20 @@
+<script setup lang="ts">
+import { inject } from 'vue';
+
+const currentDate = inject<Ref<Date>>('currentDate');
+const currentDateDisplay = computed(() => {
+  if (!currentDate?.value) return '';
+  return `${currentDate.value.getMonth() + 1}.${currentDate.value.getDate()}.${currentDate.value.getFullYear()}`;
+});
+</script>
+
 <template>
   <header class="site-header">
     <section class="site-header__logo">
       <app-logo />
     </section>
-    <section class="site-header__date">
-      <time datetime="2024-02-24">2.24.2024</time>
+    <section v-if="currentDate" class="site-header__date">
+      <time :datetime="currentDate.toISOString().split('T')[0]">{{ currentDateDisplay }}</time>
     </section>
   </header>
 </template>

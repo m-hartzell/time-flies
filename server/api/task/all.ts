@@ -1,6 +1,6 @@
-import { getTasks } from "~~/server/service/task-service";
+import { getTaskEntries } from "~~/server/service/task-service";
 
 export default defineEventHandler(async (event) => {
-	const tasks = await getTasks();
+	const tasks = await getTaskEntries();
 	return tasks;
 });
