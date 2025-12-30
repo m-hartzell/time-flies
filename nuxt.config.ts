@@ -7,6 +7,7 @@ export default defineNuxtConfig({
   },
   nitro: {
     debug: true,
-    logLevel: 'debug'
+    logLevel: 'debug',
+    preset: 'node-server'
   }
 })
