@@ -3,11 +3,28 @@ import { taskEntryTable, taskTable } from "./schema";
 import { v4 as uuid } from "uuid";
 import { eq, desc } from "drizzle-orm";
 import { TaskData, TaskEntryData } from "../api/task/save";
+import { Pool } from "pg";
 
-const db = drizzle(useRuntimeConfig().databaseUrl);
+let db: ReturnType<typeof drizzle> | null = null;
+
+export function useDb() {
+	const dbUrl = useRuntimeConfig().databaseUrl;
+	if (!dbUrl) {
+		throw new Error("Missing database URL");
+	}
+
+	if (!db) {
+		const pool = new Pool({
+			connectionString: dbUrl
+		});
+		db = drizzle(pool);
+	}
+
+	return db;
+}
 
 export async function getTaskEntries() {
-	const taskEntries = await db
+	const taskEntries = await useDb()
 		.select()
 		.from(taskEntryTable)
 		.leftJoin(
@@ -19,7 +36,7 @@ export async function getTaskEntries() {
 }
 
 // export async function getTasks() {
-// 	const tasks = await db
+// 	const tasks = await useDb()
 // 		.select()
 // 		.from(taskTable)
 // 		.leftJoin(taskEntryTable, eq(taskTable.taskId, taskEntryTable.taskId))
@@ -46,7 +63,7 @@ export async function createTaskEntry(taskEntryData: TaskEntryData) {
 		throw new Error("Task ID is required");
 	}
 
-	await db
+	await useDb()
 		.insert(taskEntryTable)
 		.values({
 			taskEntryId: taskEntryData.taskEntryId ?? uuid(),
@@ -65,7 +82,7 @@ export async function updateTaskEntry(taskEntryData: TaskEntryData) {
 		throw new Error("Task ID is required");
 	}
 	
-	await db
+	await useDb()
 		.update(taskEntryTable)
 		.set({
 			taskId: taskEntryData.taskId,
@@ -82,7 +99,7 @@ export async function createTask(taskData: TaskData & { description: string | nu
 		throw new Error("Description is required");
 	}
 
-	return await db
+	return await useDb()
 		.insert(taskTable)
 		.values({
 			taskId: taskData.taskId ?? uuid(),
