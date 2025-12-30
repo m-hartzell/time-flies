@@ -5,5 +5,4 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NITRO_PORT=3000
-      - HOST=0.0.0.0
+      DATABASE_URL: "${DATABASE_URL}"
