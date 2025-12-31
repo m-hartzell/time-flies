@@ -2,12 +2,9 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
+  sourcemap: true,
+  debug: true,
   runtimeConfig: {
     databaseUrl: process.env.DATABASE_URL,
-  },
-  nitro: {
-    debug: true,
-    logLevel: 'debug',
-    preset: 'node-server'
   }
 })
