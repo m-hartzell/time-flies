@@ -81,13 +81,13 @@ const { currentTime } = useDateTime();
     <template v-if="startNextTask == true">
       <div class="new-task-controls">
         <div class="new-task-controls__timer-and-save">
-          <nuxt-time
+          <time
             class="timer"
             :datetime="new Date().toISOString()"
             aria-live="polite"
           >
             00:00:00
-          </nuxt-time>
+          </time>
           <app-button
             @click="saveTask"
             type="button"
@@ -103,6 +103,7 @@ const { currentTime } = useDateTime();
             <nuxt-time
               class="start-time"
               :datetime="new Date().toISOString()"
+              time-style="short"
               aria-live="polite"
             >
               {{ currentTime }}
