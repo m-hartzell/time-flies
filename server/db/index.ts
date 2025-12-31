@@ -3,7 +3,6 @@ import { taskEntryTable, taskTable } from "./schema";
 import { v4 as uuid } from "uuid";
 import { eq, desc } from "drizzle-orm";
 import { TaskData, TaskEntryData } from "../api/task/save";
-import { Pool } from "pg";
 
 let db: ReturnType<typeof drizzle> | null = null;
 
@@ -14,10 +13,7 @@ export function useDb() {
 	}
 
 	if (!db) {
-		const pool = new Pool({
-			connectionString: dbUrl
-		});
-		db = drizzle(pool);
+		db = drizzle(dbUrl);
 	}
 
 	return db;
