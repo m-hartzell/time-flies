@@ -24,7 +24,8 @@ const { formatTime } = useDateTime();
             <li class="task-list__item" v-for="task in tasks" :key="task.taskEntryId">
               <article class="task" :class="{ 'task--active': task.endedAt === null }">
                 <div class="task__start-and-category">
-                  <time class="task__time" :datetime="task.startedAt">{{ formatTime(task.startedAt) }}</time>
+                  
+                  <nuxt-time class="task__time" :datetime="task.startedAt" time-style="short" />
                   <!-- <div class="task__category">{{ task.category }}</div> -->
                 </div>
                 <div class="task__description">{{ task.description }}</div>

@@ -64,9 +64,8 @@ const { currentTime } = useDateTime();
 <template>
   <div class="task-controls">
     <template v-if="startNextTask == false">
-      <time class="timer" :datetime="activeTask.startedAt" aria-live="polite">
-        {{ currentTaskTime }}
-      </time>
+      <time class="timer">{{ currentTaskTime }}</time>
+      <!-- <nuxt-time class="timer" :datetime="currentTaskTime" hour="2-digit" minute="2-digit" second="2-digit" aria-live="polite" /> -->
 
       <app-button
         v-if="startNextTask == false"
@@ -82,13 +81,13 @@ const { currentTime } = useDateTime();
     <template v-if="startNextTask == true">
       <div class="new-task-controls">
         <div class="new-task-controls__timer-and-save">
-          <time
+          <nuxt-time
             class="timer"
             :datetime="new Date().toISOString()"
             aria-live="polite"
           >
             00:00:00
-          </time>
+          </nuxt-time>
           <app-button
             @click="saveTask"
             type="button"
@@ -101,13 +100,13 @@ const { currentTime } = useDateTime();
         </div>
         <div class="new-task-controls__inputs">
           <div class="new-task-controls__start-time">
-            <time
+            <nuxt-time
               class="start-time"
               :datetime="new Date().toISOString()"
               aria-live="polite"
             >
               {{ currentTime }}
-            </time>
+            </nuxt-time>
             <app-button type="button">...</app-button>
           </div>
           <input type="text" v-model="nextTaskData.newTask.description" />

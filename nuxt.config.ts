@@ -5,5 +5,6 @@ export default defineNuxtConfig({
   sourcemap: true,
   runtimeConfig: {
     databaseUrl: process.env.NUXT_DATABASE_URL
-  }
+  },
+  modules: ["nuxt-time"]
 })
