@@ -5,6 +5,6 @@ export default defineNuxtConfig({
   sourcemap: true,
   debug: true,
   runtimeConfig: {
-    databaseUrl: '',
+    databaseUrl: process.env.DATABASE_URL
   }
 })
